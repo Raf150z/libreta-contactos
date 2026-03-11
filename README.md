@@ -84,6 +84,7 @@ git clone https://github.com/Raf150z/libreta-contactos.git
 cd libreta-contactos
 ```
 2. **Crear y activar entorno virtual**
+
 Windows:
 ```
 python -m venv venv
@@ -121,19 +122,9 @@ Panel de administración: http://localhost:8000/admin
 ## API
 La aplicación incluye una API REST para integraciones:
 
-Endpoints
+Endpoint
 ```
-GET /api/contactos/ - Listar contactos
-
-POST /api/contactos/ - Crear contacto
-
-GET /api/contactos/{id}/ - Ver detalle
-
-PUT /api/contactos/{id}/ - Actualizar
-
-DELETE /api/contactos/{id}/ - Eliminar
-
-POST /api/contactos/{id}/favorito/ - Toggle favorito
+http://localhost:8000/api/contactos/
 ```
 
 ## Autor
