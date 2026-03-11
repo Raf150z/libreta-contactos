@@ -7,8 +7,14 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from .models import Contacto
 from .forms import ContactoForm, RegistroUsuarioForm
+
 import csv
 
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import ContactoSerializer
 
 def home(request):
     return render(request, 'home.html')
@@ -182,3 +188,87 @@ def custom_logout(request):
         messages.success(request, 'Has cerrado sesión exitosamente.')
         return redirect('home')
     return redirect('home')
+
+
+
+class ContactoViewSet(viewsets.ModelViewSet):
+
+    serializer_class = ContactoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return Contacto.objects.filter(usuario=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def favorito(self, request, pk=None):
+        
+        contacto = self.get_object()
+        contacto.favorito = not contacto.favorito
+        contacto.save()
+        
+        return Response({
+            'status': 'success',
+            'favorito': contacto.favorito,
+            'message': f'Contacto {"agregado a" if contacto.favorito else "eliminado de"} favoritos'
+        })
+    
+    @action(detail=False, methods=['get'])
+    def favoritos(self, request):
+
+        favoritos = self.get_queryset().filter(favorito=True)
+        serializer = self.get_serializer(favoritos, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def buscar(self, request):
+
+        query = request.query_params.get('q', '')
+        if query:
+            contactos = self.get_queryset().filter(
+                models.Q(nombre__icontains=query) |
+                models.Q(telefono__icontains=query) |
+                models.Q(email__icontains=query)
+            )
+        else:
+            contactos = self.get_queryset()
+        
+        serializer = self.get_serializer(contactos, many=True)
+        return Response(serializer.data)
+
+
+
+class ContactoListAPIView(generics.ListCreateAPIView):
+    serializer_class = ContactoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return Contacto.objects.filter(usuario=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+
+class ContactoDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ContactoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return Contacto.objects.filter(usuario=self.request.user)
+
+
+class ContactoFavoritoAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, pk):
+        contacto = get_object_or_404(Contacto, pk=pk, usuario=request.user)
+        contacto.favorito = not contacto.favorito
+        contacto.save()
+        
+        return Response({
+            'id': contacto.id,
+            'nombre': contacto.nombre,
+            'favorito': contacto.favorito
+        })
