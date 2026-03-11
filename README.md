@@ -84,6 +84,7 @@ git clone https://github.com/Raf150z/libreta-contactos.git
 cd libreta-contactos
 ```
 2. **Crear y activar entorno virtual**
+
 Windows:
 ```
 python -m venv venv
