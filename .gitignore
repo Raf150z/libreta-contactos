@@ -1,0 +1,49 @@
+# .gitignore
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# OS
+.DS_Store
+Thumbs.db
+*.pyc
+
+# Database
+*.sqlite3
+*.db
+
+# Project specific
+.env
+*.local
+media/
+static/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Uploads
+uploads/
+contactos_fotos/

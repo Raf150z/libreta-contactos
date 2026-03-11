@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libreta de Contactos - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-address-book"></i> Mi Libreta
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contactos:lista_contactos' %}">
+                                <i class="fas fa-users"></i> Mis Contactos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'contactos:logout' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link" style="border: none; background: none;">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registrar' %}">
+                                <i class="fas fa-user-plus"></i> Registrarse
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center text-white mb-5">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-address-book me-3"></i>Libreta de Contactos
+                </h1>
+                <p class="lead fs-3 mb-5">
+                    Gestiona tus contactos de manera fácil, segura y privada
+                </p>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card text-center p-5">
+                        <i class="fas fa-check-circle text-success feature-icon"></i>
+                        <h2 class="mb-4">¡Bienvenido, {{ user.get_full_name|default:user.username }}!</h2>
+                        <p class="lead mb-4">Ya puedes gestionar tus contactos personales.</p>
+                        <div class="d-grid gap-3 d-md-flex justify-content-center">
+                            <a href="{% url 'contactos:lista_contactos' %}" class="btn btn-primary btn-lg me-md-3">
+                                <i class="fas fa-users me-2"></i>Ver mis contactos
+                            </a>
+                            <a href="{% url 'contactos:crear_contacto' %}" class="btn btn-success btn-lg">
+                                <i class="fas fa-plus-circle me-2"></i>Crear nuevo contacto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card p-5">
+                        <div class="text-center mb-5">
+                            <i class="fas fa-lock-open text-primary feature-icon"></i>
+                            <h2>Comienza a organizar tus contactos</h2>
+                            <p class="lead">Regístrate gratis y crea tu libreta personal</p>
+                        </div>
+                        
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-user-plus text-success fa-2x mb-3"></i>
+                                <h5>1. Regístrate</h5>
+                                <p>Crea tu cuenta gratis en segundos</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-address-card text-info fa-2x mb-3"></i>
+                                <h5>2. Agrega contactos</h5>
+                                <p>Guarda toda la información importante</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-search text-warning fa-2x mb-3"></i>
+                                <h5>3. Encuéntralos fácil</h5>
+                                <p>Búsqueda rápida y organización inteligente</p>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-3 d-md-flex justify-content-center">
+                            <a href="{% url 'registrar' %}" class="btn btn-primary btn-lg px-5 me-md-3">
+                                <i class="fas fa-user-plus me-2"></i>Crear cuenta gratis
+                            </a>
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg px-5">
+                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row mt-5 text-white">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold">Características</h2>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-lock fa-3x mb-3"></i>
+                <h4>Privado y Seguro</h4>
+                <p>Tus contactos son privados y solo tú puedes verlos</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-mobile-alt fa-3x mb-3"></i>
+                <h4>Acceso desde cualquier lugar</h4>
+                <p>Diseño responsive que funciona en todos tus dispositivos</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-star fa-3x mb-3"></i>
+                <h4>Contactos favoritos</h4>
+                <p>Marca tus contactos más importantes como favoritos</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">
+                &copy; {% now "Y" %} Libreta de Contactos. 
+                Desarrollado con Django. Por Rafael Velazquez
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

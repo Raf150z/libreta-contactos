@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Contacto{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirmar eliminación
+                </h4>
+            </div>
+            
+            <div class="card-body text-center">
+                <i class="fas fa-user-times fa-4x text-danger mb-3"></i>
+                
+                <h5 class="mb-3">¿Estás seguro de eliminar este contacto?</h5>
+                
+                <div class="alert alert-warning">
+                    <p class="mb-1"><strong>{{ contacto.nombre }}</strong></p>
+                    {% if contacto.telefono %}
+                    <p class="mb-1"><i class="fas fa-phone"></i> {{ contacto.telefono }}</p>
+                    {% endif %}
+                    {% if contacto.email %}
+                    <p class="mb-0"><i class="fas fa-envelope"></i> {{ contacto.email }}</p>
+                    {% endif %}
+                </div>
+                
+                <p class="text-danger">
+                    <i class="fas fa-info-circle"></i>
+                    Esta acción no se puede deshacer.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'contactos:detalle_contacto' contacto.id %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Sí, eliminar contacto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
