@@ -138,6 +138,6 @@ POST /api/contactos/{id}/favorito/ - Toggle favorito
 
 ## Autor
 
-Rafael Velazquez
-GitHub: @Raf150z
-Proyecto: Libreta de Contactos
+**Rafael Velazquez**
+**GitHub: @Raf150z**
+**Proyecto: Libreta de Contactos**
